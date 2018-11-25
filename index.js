@@ -11,14 +11,7 @@
  const StringDecoder = require('string_decoder').StringDecoder;
  const config = require('./config');
  const fs = require('fs');
- const _data = require('./lib/data');
-
- // Testing
- // @TODO delete this
-
- _data.read('test','newFile', (err,data) => {
-   console.log('Ths was the error', err, 'And this was the data', data);
-  });
+ 
 
  // Define handlers
  let handlers = {};
