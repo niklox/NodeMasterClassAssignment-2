@@ -9,32 +9,17 @@
  const https = require('https');
  const url = require('url');
  const StringDecoder = require('string_decoder').StringDecoder;
- const config = require('./config');
+ const config = require('./lib/config');
  const fs = require('fs');
- 
+ const handlers = require('./lib/handlers');
+ const helpers = require('./lib/helpers');
 
- // Define handlers
- let handlers = {};
-
- // Ping handler
- handlers.ping = (data,callback) => {
-   callback(200);
- };
-
- // Hello handler
- handlers.hello = (data,callback) => {
-   callback(406,{'name' : 'Hello Mr! I\'m here ready to rock...'});
- };
-
- // Respond to not found requests
- handlers.notFound = (data,callback) => {
-   callback(404);
- };
 
  // Define a request router
  const router = {
    'ping' : handlers.ping,
-   'hello' : handlers.hello
+   'hello' : handlers.hello,
+   'users' : handlers.users
  }
 
  // Instantiate the server
@@ -89,6 +74,8 @@ const commonServer = (req,res) => {
     buffer += decoder.write(data);
   });
 
+
+
   req.on('end', () => {
     buffer += decoder.end();
 
@@ -101,8 +88,11 @@ const commonServer = (req,res) => {
       'queryStringObject' : queryStringObject,
       'method' : method,
       'headers' : headers,
-      'payload' : buffer
+      'payload' : helpers.parseJsonToObject(buffer)
+      //'payload' : buffer
     };
+
+    //console.log(data.payload);
 
     // Route the request
     handler(data,(statusCode,payload) => {
@@ -112,6 +102,8 @@ const commonServer = (req,res) => {
       payload = typeof(payload) == 'object' ? payload : {};
       // Stringify the payload
       let payloadString = JSON.stringify(payload);
+
+      //console.log(payloadString + 'all the stuff');
 
       // Return the response to clients
       res.setHeader('Content-type','application/json');
