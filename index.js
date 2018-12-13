@@ -5,6 +5,7 @@
  */
 
  // Dependencies
+
  const http = require('http');
  const https = require('https');
  const url = require('url');
@@ -13,7 +14,6 @@
  const fs = require('fs');
  const handlers = require('./lib/handlers');
  const helpers = require('./lib/helpers');
-
 
  // Define a request router
  const router = {
@@ -73,8 +73,6 @@ const commonServer = (req,res) => {
   req.on('data', function(data){
     buffer += decoder.write(data);
   });
-
-
 
   req.on('end', () => {
     buffer += decoder.end();
