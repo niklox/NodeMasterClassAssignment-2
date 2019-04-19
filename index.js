@@ -15,6 +15,11 @@
  const handlers = require('./lib/handlers');
  const helpers = require('./lib/helpers');
 
+ // @TODO get rid of this
+ helpers.sendTwilioSms('0193432770','hello',(err) => {
+   console.log('This was the error', err)
+ });
+
  // Define a request router
  const router = {
    'ping' : handlers.ping,
